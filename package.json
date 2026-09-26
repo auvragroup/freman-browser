@@ -1,0 +1,16 @@
+{
+  "name": "freman-browser-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:ui": "npm --workspace apps/web-ui run dev",
+    "dev:desktop": "npm --workspace apps/desktop run dev",
+    "dev:backend": "python -m uvicorn app.main:app --reload --app-dir apps/backend",
+    "build:ui": "npm --workspace apps/web-ui run build",
+    "build:desktop": "npm --workspace apps/desktop run build",
+    "lint": "npm --workspace apps/web-ui run lint"
+  }
+}

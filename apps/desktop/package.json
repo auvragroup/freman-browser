@@ -1,0 +1,16 @@
+{
+  "name": "@freman/desktop",
+  "private": true,
+  "version": "0.1.0",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "npm run build && electron .",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "electron": "^31.7.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
