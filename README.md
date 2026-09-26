@@ -1,32 +1,31 @@
 # Freman Browser
 
-A desktop-first browser platform built on Electron + Chromium, with a React browser chrome, FastAPI backend, and Web3/extension scaffolding.
+Freman is a desktop-first browser built for real web browsing, Web3 wallet connectivity, and curated extension support using Electron's bundled Chromium.
 
-## Why Electron instead of Chromium source?
+## Product direction
 
-This project intentionally uses Electron's bundled Chromium rather than building Chromium from source. That matches the product constraints:
+- Real browser tabs, navigation, history, bookmarks, and downloads
+- Freman Search as default new-tab/search experience
+- Web3 wallet injection using EIP-1193 provider patterns
+- Curated extension gallery with verified compatibility labels
+- FastAPI backend for search proxy, sync, and metadata APIs
 
-- real browser engine via Electron/Chromium
-- extension support through `session.loadExtension()`
-- fast iteration and a desktop-first workflow
-- no custom Chromium source build in scope
+## Repository structure
 
-## Architecture
-
-- `apps/desktop` — Electron shell, BrowserWindow, preload IPC, app lifecycle
-- `apps/web-ui` — React + TypeScript + Tailwind browser chrome UI
-- `apps/backend` — FastAPI API for search, sync, and wallet metadata
-- `packages/shared` — shared types/contracts between UI and backend
+- `apps/desktop` — Electron shell and Chromium browser lifecycle
+- `apps/web-ui` — React + TypeScript UI for tabs, chrome, search, wallet, and gallery
+- `apps/backend` — FastAPI API for search, wallet metadata, and sync endpoints
+- `packages/shared` — shared schema and constants
 
 ## Quick start
 
-### 1) Install Node dependencies
+### Install Node dependencies
 
 ```bash
 npm install
 ```
 
-### 2) Start the backend
+### Start backend
 
 ```bash
 python -m venv .venv
@@ -35,26 +34,18 @@ pip install -r apps/backend/requirements.txt
 python -m uvicorn app.main:app --reload --app-dir apps/backend
 ```
 
-### 3) Start the UI
+### Start frontend UI
 
 ```bash
 npm --workspace apps/web-ui run dev
 ```
 
-### 4) Start the Electron app
+### Start Electron app
 
 ```bash
 npm --workspace apps/desktop run dev
 ```
 
-## Product goals
+## Important note
 
-- real browser tabs and navigation
-- Freman Search as default new-tab/search page
-- synced bookmarks/history/settings
-- wallet provider injection and read-only balances
-- curated extension gallery support
-
-## Notes
-
-This is a starter scaffold designed to be extended toward the full Freman product roadmap.
+This project intentionally does not build Chromium from source. It uses Electron's bundled Chromium, which matches the product requirement for a real browser with extension compatibility and Web3 support without custom Chromium compilation.

@@ -1,5 +1,12 @@
-export default {
-  appName: 'Freman',
-  version: '0.1.0',
-  backendUrl: 'http://localhost:8000'
+export type BrowserRuntime = {
+  appName: string;
+  version: string;
+  getBackendUrl: () => string;
+  getSearchProvider: () => string;
 };
+
+declare global {
+  interface Window {
+    freman?: BrowserRuntime;
+  }
+}

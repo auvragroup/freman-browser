@@ -4,13 +4,15 @@ import path from 'path';
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 1400,
-    height: 980,
+    height: 1000,
     minWidth: 1200,
     minHeight: 760,
     titleBarStyle: 'hiddenInset',
-    backgroundColor: '#0a0d14',
+    backgroundColor: '#091018',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
     }
   });
 
