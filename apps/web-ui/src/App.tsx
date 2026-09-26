@@ -1,10 +1,12 @@
-const tabs = [
+import { useEffect, useMemo, useState } from 'react';
+
+const initialTabs = [
   { id: 'search', title: 'Freman Search', active: true },
   { id: 'wallet', title: 'Wallet', active: false },
   { id: 'gallery', title: 'Extensions', active: false }
 ];
 
-const stats = [
+const cardStats = [
   { label: 'Engine', value: 'Electron + Chromium' },
   { label: 'Search', value: 'Brave-ready' },
   { label: 'Wallet', value: 'EIP-1193-ready' },
@@ -12,13 +14,27 @@ const stats = [
 ];
 
 const searchIdeas = [
-  'What is Freman Search and how does it work?',
-  'How to connect a Web3 wallet to a dApp?',
+  'What is the safest architecture for a Web3 desktop browser?',
+  'How can a typical dApp detect an injected wallet provider?',
   'How do verified browser extensions load in Electron?',
-  'Which backend APIs power bookmarks and sync?'
+  'Which API should power Freman Search and new-tab results?'
 ];
 
 export default function App() {
+  const [appInfo, setAppInfo] = useState<{ appName: string; version: string; backendUrl: string; searchProvider: string } | null>(null);
+  const [query, setQuery] = useState('Freman Search');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'freman' in window) {
+      window.freman?.getAppInfo?.().then((data) => setAppInfo(data)).catch(() => null);
+    }
+  }, []);
+
+  const searchUrl = useMemo(() => {
+    if (!query.trim()) return 'https://freman.search';
+    return `https://freman.search?q=${encodeURIComponent(query.trim())}`;
+  }, [query]);
+
   return (
     <div className="h-full bg-[#091018] text-slate-100">
       <div className="border-b border-slate-800 bg-[#101b2a] px-4 py-3">
@@ -32,8 +48,8 @@ export default function App() {
           <div className="ml-3 flex flex-1 items-center gap-2 rounded-lg border border-slate-700 bg-slate-950/70 px-3 py-2 text-slate-300">
             <span className="text-lg">🔎</span>
             <input
-              value="https://freman.search"
-              readOnly
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
               className="w-full bg-transparent text-sm text-slate-200 outline-none"
             />
           </div>
@@ -44,7 +60,7 @@ export default function App() {
         </div>
 
         <div className="mt-3 flex items-center gap-2">
-          {tabs.map((tab) => (
+          {initialTabs.map((tab) => (
             <button
               key={tab.id}
               className={[
@@ -65,12 +81,12 @@ export default function App() {
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Freman</h2>
             <span className="rounded-full bg-brand-500/20 px-2 py-1 text-[10px] uppercase tracking-wide text-brand-200">
-              v0.1
+              {appInfo?.version ?? 'v0.1'}
             </span>
           </div>
 
           <div className="space-y-3">
-            {stats.map((item) => (
+            {cardStats.map((item) => (
               <div key={item.label} className="rounded-xl border border-slate-800 bg-slate-900/70 p-3">
                 <div className="text-[11px] uppercase tracking-[0.08em] text-slate-400">{item.label}</div>
                 <div className="mt-1 text-base font-medium text-slate-100">{item.value}</div>
@@ -79,12 +95,12 @@ export default function App() {
           </div>
 
           <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950/60 p-3">
-            <div className="text-[11px] uppercase tracking-[0.08em] text-slate-400">Current state</div>
+            <div className="text-[11px] uppercase tracking-[0.08em] text-slate-400">Runtime</div>
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              <li>• Electron browser shell active</li>
-              <li>• Search provider proxy ready</li>
-              <li>• Wallet provider injection scaffolded</li>
-              <li>• Extension gallery metadata ready</li>
+              <li>• App: {appInfo?.appName ?? 'Freman'}</li>
+              <li>• Search provider: {appInfo?.searchProvider ?? 'brave'}</li>
+              <li>• Backend: {appInfo?.backendUrl ?? 'http://localhost:8000'}</li>
+              <li>• URL: {searchUrl}</li>
             </ul>
           </div>
         </aside>

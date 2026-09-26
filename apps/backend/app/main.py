@@ -1,7 +1,16 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI(title='Freman API', version='0.1.0')
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 
 class SearchRequest(BaseModel):
@@ -22,8 +31,8 @@ def search(query: str = '', provider: str = 'brave') -> dict:
         'results': [
             {
                 'title': 'Freman Search Ready',
-                'url': 'https://freman.example',
-                'snippet': 'Starter search response for the Freman browser platform.'
+                'url': 'https://example.com/freman-search',
+                'snippet': 'Starter backend response and Brave/Bing/SerpAPI-ready proxy.'
             }
         ]
     }
@@ -37,8 +46,19 @@ def search_post(request: SearchRequest) -> dict:
         'results': [
             {
                 'title': 'Freman Search Ready',
-                'url': 'https://freman.example',
-                'snippet': 'Backend proxy pattern is ready for Brave/Bing/SerpAPI integration.'
+                'url': 'https://example.com/freman-search',
+                'snippet': 'Search API integration scaffold for Brave, Bing, or SerpAPI.'
             }
         ]
+    }
+
+
+@app.get('/wallet/overview')
+def wallet_overview() -> dict:
+    return {
+        'connected': False,
+        'network': 'Ethereum Mainnet',
+        'address': None,
+        'balance': None,
+        'nfts': []
     }
